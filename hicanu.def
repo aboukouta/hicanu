@@ -1,0 +1,37 @@
+
+Bootstrap: library
+From: ubuntu:18.04
+
+%labels
+    Author Abou Kouta
+    Version v2.1.1
+    Website https://github.com/marbl/canu
+
+%environment
+    export PATH="/usr/local/bin:$PATH"
+
+%post
+    apt update
+    apt install -y software-properties-common
+    apt-add-repository universe
+    apt update
+    export LC_ALL="C.UTF-8"
+    export LANG="C.UTF-8"
+    echo 'export LC_ALL=C.UTF-8' >> "$SINGULARITY_ENVIRONMENT"
+    echo 'export LANG=C.UTF-8' >> "$SINGULARITY_ENVIRONMENT"
+
+    # install hicanu
+
+    apt install -y wget build-essential openjdk-8-jre gnuplot
+    export URL="https://github.com/marbl/canu/releases/tag/v2.1.1/canu-2.1.1.tar.xz"
+    wget "$URL" -O - | tar -xJf -
+    cd "canu-2.1.1" || exit 1
+    cp -R --target-directory=/usr/local/bin/ bin/*
+    cp -R --target-directory=/usr/local/lib/ lib/*
+    cp -R --target-directory=/usr/local/share/ share/*
+
+%test
+    export PATH="/usr/local/bin:$PATH"
+    command -v canu >/dev/null 2>&1 || { echo >&2 "I require canu but it's not installed.  Aborting."; exit 1; }
+
+
