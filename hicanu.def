@@ -30,6 +30,7 @@ From: ubuntu:18.04
     cp -R --target-directory=/usr/local/lib/ lib/*
     cp -R --target-directory=/usr/local/share/ share/*
 
+
 %test
     export PATH="/usr/local/bin:$PATH"
     command -v canu >/dev/null 2>&1 || { echo >&2 "I require canu but it's not installed.  Aborting."; exit 1; }
